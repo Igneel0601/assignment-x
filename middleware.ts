@@ -5,9 +5,17 @@ import { getToken } from "next-auth/jwt"
 export async function middleware(req: NextRequest) {
   const token = await getToken({ req })
 
+  // not logged in
   if (!token) {
     return NextResponse.redirect(
       new URL("/api/auth/signin", req.url)
+    )
+  }
+
+  // logged in but not admin
+  if (token.role !== "admin") {
+    return NextResponse.redirect(
+      new URL("/", req.url)
     )
   }
 
