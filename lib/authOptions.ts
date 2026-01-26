@@ -4,8 +4,14 @@ import { AuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 
 export const authOptions: AuthOptions = {
-  secret: process.env.AUTH_SECRET,
+  secret: process.env.NEXTAUTH_SECRET,
+
   adapter: MongoDBAdapter(clientPromise),
+
+  session: {
+    strategy: "jwt",
+  },
+
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
@@ -21,10 +27,20 @@ export const authOptions: AuthOptions = {
       },
     }),
   ],
+
   callbacks: {
-    session({ session, user }) {
+    // runs when JWT is created/updated
+    async jwt({ token, user }) {
+      if (user) {
+        token.role = user.role ?? "user";
+      }
+      return token;
+    },
+
+    // runs when session is sent to client
+    async session({ session, token }) {
       if (session.user) {
-        session.user.role = user.role ?? "user";
+        session.user.role = token.role as string;
       }
       return session;
     },
