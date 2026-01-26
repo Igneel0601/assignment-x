@@ -4,7 +4,7 @@ import { authOptions } from "@/lib/authOptions"; // your NextAuth config
 import clientPromise from "@/lib/mongoClient";
 
 export async function POST(req: Request) {
-    console.log("🔥 /api/student HIT");
+    // console.log(" /api/student was HIT");
     const session = await getServerSession(authOptions);
 
     if (!session?.user?.email) {

@@ -86,10 +86,6 @@ export default function StudentForm() {
     return <div>Not authenticated</div>;
   }
 
-
-
-
-
   const startEditing = () => {
     setInitialFormData(formData);
     setIsEditing(true);
@@ -212,3 +208,5 @@ export default function StudentForm() {
     </div>
   );
 }
+
+
